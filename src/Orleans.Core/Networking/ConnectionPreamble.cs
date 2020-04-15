@@ -2,7 +2,7 @@ using System;
 using System.Buffers;
 using System.Buffers.Binary;
 using System.IO.Pipelines;
-using System.Threading.Tasks;
+using Nekara.Models;
 using Microsoft.AspNetCore.Connections;
 using Orleans.Serialization;
 
@@ -12,7 +12,7 @@ namespace Orleans.Runtime.Messaging
     {
         private const int MaxPreambleLength = 1024;
 
-        internal static async ValueTask Write(ConnectionContext connection, GrainId nodeIdentity, NetworkProtocolVersion protocolVersion, SiloAddress siloAddress)
+        internal static async System.Threading.Tasks.ValueTask Write(ConnectionContext connection, GrainId nodeIdentity, NetworkProtocolVersion protocolVersion, SiloAddress siloAddress)
         {
             var output = connection.Transport.Output;
             var outputWriter = new PrefixingBufferWriter<byte, PipeWriter>(sizeof(int), 1024, MemoryPool<byte>.Shared);
@@ -59,7 +59,7 @@ namespace Orleans.Runtime.Messaging
             outputWriter.Complete(lengthSpan);
         }
 
-        internal static async ValueTask<(GrainId, NetworkProtocolVersion, SiloAddress)> Read(ConnectionContext connection)
+        internal static async System.Threading.Tasks.ValueTask<(GrainId, NetworkProtocolVersion, SiloAddress)> Read(ConnectionContext connection)
         {
             var input = connection.Transport.Input;
 

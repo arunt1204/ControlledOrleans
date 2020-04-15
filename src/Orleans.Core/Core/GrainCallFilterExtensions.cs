@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+using Nekara.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Orleans.Hosting

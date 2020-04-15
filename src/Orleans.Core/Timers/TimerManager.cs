@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
+using Nekara.Models;
 using Orleans.Runtime;
 using Orleans.Threading;
 
@@ -31,7 +31,7 @@ namespace Orleans.Timers.Internal
         private sealed class DelayTimer : ITimerCallback, ILinkedListElement<DelayTimer>
         {
             private readonly TaskCompletionSource<bool> completion =
-                new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                new TaskCompletionSource<bool>(System.Threading.Tasks.TaskCreationOptions.RunContinuationsAsynchronously);
 
             public DelayTimer(DateTime dueTime, CancellationToken cancellationToken)
             {

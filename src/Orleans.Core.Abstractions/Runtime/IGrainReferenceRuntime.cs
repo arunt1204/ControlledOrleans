@@ -1,6 +1,6 @@
 using Orleans.CodeGeneration;
 using System;
-using System.Threading.Tasks;
+using Nekara.Models;
 
 namespace Orleans.Runtime
 {

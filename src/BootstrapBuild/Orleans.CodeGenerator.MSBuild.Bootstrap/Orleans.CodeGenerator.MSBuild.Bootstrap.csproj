@@ -24,6 +24,7 @@
       <Link>_%(Filename)%(Extension)</Link>
       <Visible>false</Visible>
     </Compile>
+    <ProjectReference Include="..\..\..\..\..\newsch\testclone\nekara-csharp\Source\NekaraModels\NekaraModels.csproj" />
     <ProjectReference Include="..\..\Orleans.CodeGenerator\Orleans.CodeGenerator.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\..\Orleans.CodeGenerator.MSBuild.Tasks\Orleans.CodeGenerator.MSBuild.Tasks.csproj" PrivateAssets="all" />
   </ItemGroup>

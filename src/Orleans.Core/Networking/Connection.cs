@@ -4,7 +4,7 @@ using System.IO.Pipelines;
 using System.Net;
 using System.Threading;
 using System.Threading.Channels;
-using System.Threading.Tasks;
+using Nekara.Models;
 using Microsoft.AspNetCore.Connections;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -19,7 +19,8 @@ namespace Orleans.Runtime.Messaging
 {
     internal abstract class Connection
     {
-        private static readonly Func<ConnectionContext, Task> OnConnectedDelegate = context => OnConnectedAsync(context);
+        // private static readonly Func<ConnectionContext, Task> OnConnectedDelegate = context => OnConnectedAsync(context);
+        private static readonly Func<ConnectionContext, System.Threading.Tasks.Task> OnConnectedDelegate = context => OnConnectedAsync_temp(context);
         private static readonly Action<object> OnConnectionClosedDelegate = state => ((Connection)state).CloseInternal(new ConnectionAbortedException("Connection closed"));
         private static readonly UnboundedChannelOptions OutgoingMessageChannelOptions = new UnboundedChannelOptions
         {
@@ -110,6 +111,20 @@ namespace Orleans.Runtime.Messaging
             NetworkingStatisticsGroup.OnOpenedSocket(connection.ConnectionDirection);
             return connection.RunInternal();
         }
+
+        /* Temp fn only for testing Nekara service */
+        private static System.Threading.Tasks.Task OnConnectedAsync_temp(ConnectionContext context)
+        {
+            var connection = context.Features.Get<Connection>();
+            context.ConnectionClosed.Register(OnConnectionClosedDelegate, connection);
+
+            NetworkingStatisticsGroup.OnOpenedSocket(connection.ConnectionDirection);
+
+            var _t1 = connection.RunInternal().InnerTask;
+
+            return _t1;
+        }
+        /* Temp fn only for testing Nekara service */
 
         protected virtual Task RunInternal() => Task.WhenAll(this.ProcessIncoming(), this.ProcessOutgoing());
 

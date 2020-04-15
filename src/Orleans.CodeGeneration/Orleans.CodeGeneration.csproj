@@ -12,4 +12,8 @@
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="$(SystemThreadingTasksExtensionsVersion)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\newsch\testclone\nekara-csharp\Source\NekaraModels\NekaraModels.csproj" />
+  </ItemGroup>
+
 </Project>

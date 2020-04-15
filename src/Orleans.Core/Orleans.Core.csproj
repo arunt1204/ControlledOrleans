@@ -44,4 +44,8 @@
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(MicrosoftBclAsyncInterfacesVersion)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\newsch\testclone\nekara-csharp\Source\NekaraModels\NekaraModels.csproj" />
+  </ItemGroup>
+
 </Project>

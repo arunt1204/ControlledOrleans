@@ -10,4 +10,7 @@
     <PackageReference Include="System.Runtime" Version="$(SystemRuntimeVersion)" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(MicrosoftExtensionsLoggingVersion)" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\newsch\testclone\nekara-csharp\Source\NekaraModels\NekaraModels.csproj" />
+  </ItemGroup>
 </Project>

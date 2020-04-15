@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading;
-using System.Threading.Tasks;
+using Nekara.Models;
 using Microsoft.AspNetCore.Connections;
 using Microsoft.Extensions.Logging;
 using Orleans.Runtime;
@@ -26,9 +26,9 @@ namespace Orleans.Networking.Shared
             this.memoryPool = memoryPool.Pool;
         }
 
-        public async ValueTask<ConnectionContext> ConnectAsync(EndPoint endpoint, CancellationToken cancellationToken)
+        public async System.Threading.Tasks.ValueTask<ConnectionContext> ConnectAsync(EndPoint endpoint, CancellationToken cancellationToken)
         {
-            var socket = new Socket(endpoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp)
+            var socket = new System.Net.Sockets.Socket(endpoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp)
             {
                 LingerState = new LingerOption(true, 0),
                 NoDelay = true
@@ -63,7 +63,7 @@ namespace Orleans.Networking.Shared
             private readonly TaskCompletionSource<SingleUseSocketAsyncEventArgs> completion
                 = new TaskCompletionSource<SingleUseSocketAsyncEventArgs>();
 
-            public TaskAwaiter<SingleUseSocketAsyncEventArgs> GetAwaiter() => this.completion.Task.GetAwaiter();
+            public Nekara.Models.TaskAwaiter<SingleUseSocketAsyncEventArgs> GetAwaiter() => this.completion.Task.GetAwaiter();
 
             public void Complete() => this.completion.TrySetResult(this);
 

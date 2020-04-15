@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
-using System.Threading.Tasks;
+using Nekara.Models;
 
 namespace Orleans
 {
@@ -31,8 +31,8 @@ namespace Orleans
                 task.ContinueWith(
                     IgnoreTaskContinuation,
                     CancellationToken.None,
-                    TaskContinuationOptions.NotOnRanToCompletion | TaskContinuationOptions.ExecuteSynchronously,
-                    TaskScheduler.Default);
+                    System.Threading.Tasks.TaskContinuationOptions.NotOnRanToCompletion | System.Threading.Tasks.TaskContinuationOptions.ExecuteSynchronously,
+                    System.Threading.Tasks.TaskScheduler.Default);
             }
         }
     }

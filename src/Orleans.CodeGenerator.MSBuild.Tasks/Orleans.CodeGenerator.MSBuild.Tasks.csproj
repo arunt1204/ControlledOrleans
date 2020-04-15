@@ -15,5 +15,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Win32.Registry" Version="$(MicrosoftWin32RegistryVersion)" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\newsch\testclone\nekara-csharp\Source\NekaraModels\NekaraModels.csproj" />
+  </ItemGroup>
 
 </Project>

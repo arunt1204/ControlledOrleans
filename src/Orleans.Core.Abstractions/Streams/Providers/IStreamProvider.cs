@@ -1,6 +1,6 @@
 using Orleans.Runtime;
 using System;
-using System.Threading.Tasks;
+using Nekara.Models;
 
 namespace Orleans.Streams
 {

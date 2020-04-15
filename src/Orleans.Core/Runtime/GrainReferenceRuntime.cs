@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Nekara.Models;
 
 namespace Orleans.Runtime
 {
@@ -103,7 +103,7 @@ namespace Orleans.Runtime
         {
             bool isOneWayCall = (options & InvokeMethodOptions.OneWay) != 0;
 
-            var resolver = isOneWayCall ? null : new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var resolver = isOneWayCall ? null : new TaskCompletionSource<object>(System.Threading.Tasks.TaskCreationOptions.RunContinuationsAsynchronously);
             this.RuntimeClient.SendRequest(reference, request, resolver, options, reference.GenericArguments);
             return isOneWayCall ? null : resolver.Task;
         }

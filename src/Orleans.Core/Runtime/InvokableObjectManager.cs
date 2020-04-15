@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
+using Nekara.Models;
 using Microsoft.Extensions.Logging;
 using Orleans.CodeGeneration;
 using Orleans.Runtime;
@@ -125,7 +125,7 @@ namespace Orleans
                         this.dispatchFunc,
                         objectData,
                         CancellationToken.None,
-                        TaskCreationOptions.DenyChildAttach,
+                        System.Threading.Tasks.TaskCreationOptions.DenyChildAttach,
                         TaskScheduler.Default).Ignore();
             }
         }
