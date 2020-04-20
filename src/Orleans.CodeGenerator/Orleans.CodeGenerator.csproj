@@ -1,9 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <AssemblyName>Orleans.CodeGenerator</AssemblyName>
     <RootNamespace>Orleans.CodeGenerator</RootNamespace>
     <PackageId>Microsoft.Orleans.CodeGenerator</PackageId>
     <TargetFrameworks>$(StandardTargetFrameworks)</TargetFrameworks>
+    <!-- <TargetFramework>netstandard2.0</TargetFramework> -->
+    <!-- <TargetFramework>netcoreapp3.1</TargetFramework> -->
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisVersion)" />
@@ -11,6 +13,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(MicrosoftExtensionsLoggingVersion)" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\newsch\testclone\nekara-csharp\Source\NekaraModels\NekaraModels.csproj" />
+    <Reference Include="NekaraModels">
+      <HintPath>..\..\..\..\newsch\nekara-csharp\Source\NekaraModels\bin\Debug\netstandard2.0\NekaraModels.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

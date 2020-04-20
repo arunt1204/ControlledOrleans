@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading;
-using System.Threading.Tasks;
+using Nekara.Models;
 using Orleans.CodeGeneration;
 using Orleans.GrainDirectory;
 using Orleans.MultiCluster;
@@ -1233,7 +1233,9 @@ namespace Orleans.Runtime
                 var capture = activationData;
                 tasks.Add(DestroyActivation(capture, timeoutTokenSource.Token));
             }
+
             return Task.WhenAll(tasks);
+            // throw new NotImplementedException();
         }
 
         private void OnSiloStatusChange(SiloAddress updatedSilo, SiloStatus status)

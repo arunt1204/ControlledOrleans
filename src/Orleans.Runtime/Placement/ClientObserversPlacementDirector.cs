@@ -1,7 +1,7 @@
 using Orleans.GrainDirectory;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using Nekara.Models;
 
 namespace Orleans.Runtime.Placement
 {

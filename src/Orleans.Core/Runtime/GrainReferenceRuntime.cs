@@ -37,13 +37,13 @@ namespace Orleans.Runtime
             this.serializationManager = serializationManager;
             this.filters = outgoingCallFilters.ToArray();
         }
-
+         
         public IRuntimeClient RuntimeClient { get; private set; }
 
         /// <inheritdoc />
         public void InvokeOneWayMethod(GrainReference reference, int methodId, object[] arguments, InvokeMethodOptions options, SiloAddress silo)
         {
-            Task<object> resultTask = InvokeMethodAsync<object>(reference, methodId, arguments, options | InvokeMethodOptions.OneWay, silo);
+            var resultTask = InvokeMethodAsync<object>(reference, methodId, arguments, options | InvokeMethodOptions.OneWay, silo);
             if (!resultTask.IsCompleted && resultTask.Result != null)
             {
                 throw new OrleansException("Unexpected return value: one way InvokeMethod is expected to return null.");

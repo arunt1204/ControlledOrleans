@@ -5,6 +5,8 @@
     <Title>Microsoft Orleans Core Abstractions</Title>
     <Description>Core abstractions library of Microsoft Orleans</Description>
     <TargetFrameworks>$(StandardTargetFrameworks)</TargetFrameworks>
+    <!-- <TargetFramework>netstandard2.0</TargetFramework> -->
+    <!-- <TargetFramework>netcoreapp3.1</TargetFramework> -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -16,12 +18,15 @@
   <ItemGroup>
     <PackageReference Include="System.Memory" Version="$(SystemMemoryVersion)" />
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="$(MicrosoftBclHashCodeVersion)" />
+    <!-- <PackageReference Include="System.Threading.Tasks.Extensions" Version="$(SystemThreadingTasksExtensionsVersion)" /> -->
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="$(SystemThreadingTasksExtensionsVersion)" />
     <PackageReference Include="System.Collections.Immutable" Version="$(SystemCollectionsImmutableVersion)" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\newsch\testclone\nekara-csharp\Source\NekaraModels\NekaraModels.csproj" />
+    <Reference Include="NekaraModels">
+      <HintPath>..\..\..\..\newsch\nekara-csharp\Source\NekaraModels\bin\Debug\netstandard2.0\NekaraModels.dll</HintPath>
+    </Reference>
   </ItemGroup>
   
 </Project>

@@ -9,11 +9,14 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisVersion)" />
     <PackageReference Include="System.Runtime" Version="$(SystemRuntimeVersion)" />
+    <!-- <PackageReference Include="System.Threading.Tasks.Extensions" Version="$(SystemThreadingTasksExtensionsVersion)" /> -->
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="$(SystemThreadingTasksExtensionsVersion)" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\newsch\testclone\nekara-csharp\Source\NekaraModels\NekaraModels.csproj" />
+    <Reference Include="NekaraModels">
+      <HintPath>..\..\..\..\newsch\nekara-csharp\Source\NekaraModels\bin\Debug\netstandard2.0\NekaraModels.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

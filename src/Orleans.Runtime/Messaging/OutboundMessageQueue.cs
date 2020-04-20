@@ -1,6 +1,6 @@
 using System;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
+using Nekara.Models;
 
 namespace Orleans.Runtime.Messaging
 {

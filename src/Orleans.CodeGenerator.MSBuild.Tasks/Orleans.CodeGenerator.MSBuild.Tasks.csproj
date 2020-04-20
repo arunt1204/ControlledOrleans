@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <!-- <TargetFramework>netcoreapp3.1</TargetFramework> -->
   </PropertyGroup>
 
   <PropertyGroup>
@@ -16,7 +17,9 @@
     <PackageReference Include="Microsoft.Win32.Registry" Version="$(MicrosoftWin32RegistryVersion)" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\newsch\testclone\nekara-csharp\Source\NekaraModels\NekaraModels.csproj" />
+    <Reference Include="NekaraModels">
+      <HintPath>..\..\..\..\newsch\nekara-csharp\Source\NekaraModels\bin\Debug\netstandard2.0\NekaraModels.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

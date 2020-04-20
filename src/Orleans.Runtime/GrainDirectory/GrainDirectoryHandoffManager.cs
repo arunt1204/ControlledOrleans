@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Nekara.Models;
 using Microsoft.Extensions.Logging;
 using Orleans.Runtime.Scheduler;
 
@@ -340,7 +340,7 @@ namespace Orleans.Runtime.GrainDirectory
                     for (var i = tasks.Length - 1; i >= 0; i--)
                     {
                         // Retry failed tasks next time.
-                        if (tasks[i].Status != TaskStatus.RanToCompletion) continue;
+                        if (tasks[i].Status != System.Threading.Tasks.TaskStatus.RanToCompletion) continue;
 
                         // Record the applications which lost the registration race (duplicate activations).
                         var winner = await tasks[i];
@@ -384,7 +384,7 @@ namespace Orleans.Runtime.GrainDirectory
                     for (var i = tasks.Length - 1; i >= 0; i--)
                     {
                         // Retry failed tasks next time.
-                        if (tasks[i].Status != TaskStatus.RanToCompletion) continue;
+                        if (tasks[i].Status != System.Threading.Tasks.TaskStatus.RanToCompletion) continue;
 
                         // Remove tasks which completed.
                         multiActivations.RemoveAt(i);
@@ -473,7 +473,8 @@ namespace Orleans.Runtime.GrainDirectory
                     }
 
                     var remoteCatalog = this.grainFactory.GetSystemTarget<ICatalog>(Constants.CatalogId, pair.Key);
-                    await remoteCatalog.DeleteActivations(pair.Value);
+                    // await remoteCatalog.DeleteActivations(pair.Value);
+                    await Task.Delay(1);
                 }
 
                 duplicates.Remove(pair.Key);

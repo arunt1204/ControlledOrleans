@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
+using Nekara.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Orleans.Runtime.Scheduler
@@ -34,12 +34,12 @@ namespace Orleans.Runtime.Scheduler
 
         /// <summary>Gets an enumerable of the tasks currently scheduled on this scheduler.</summary>
         /// <returns>An enumerable of the tasks currently scheduled.</returns>
-        protected override IEnumerable<Task> GetScheduledTasks() => this.workerGroup.GetScheduledTasks();
+        // protected override IEnumerable<Task> GetScheduledTasks() => this.workerGroup.GetScheduledTasks();
 
         public void RunTask(Task task)
         {
             RuntimeContext.SetExecutionContext(workerGroup.GrainContext);
-            bool done = TryExecuteTask(task);
+            bool done = TryExecuteTask(task.InnerTask);
             if (!done)
                 logger.Warn(ErrorCode.SchedulerTaskExecuteIncomplete4, "RunTask: Incomplete base.TryExecuteTask for Task Id={0} with Status={1}",
                     task.Id, task.Status);
@@ -50,12 +50,14 @@ namespace Orleans.Runtime.Scheduler
 
         /// <summary>Queues a task to the scheduler.</summary>
         /// <param name="task">The task to be queued.</param>
-        protected override void QueueTask(Task task)
+        protected override void QueueTask(System.Threading.Tasks.Task task)
         {
 #if DEBUG
             if (logger.IsEnabled(LogLevel.Trace)) logger.Trace(myId + " QueueTask Task Id={0}", task.Id);
 #endif
-            workerGroup.EnqueueTask(task);
+            var t1 = new Task();
+            t1.InnerTask = task;
+            workerGroup.EnqueueTask(t1);
         }
 
         /// <summary>
@@ -66,7 +68,7 @@ namespace Orleans.Runtime.Scheduler
         /// </returns>
         /// <param name="task">The <see cref="T:System.Threading.Tasks.Task"/> to be executed.</param>
         /// <param name="taskWasPreviouslyQueued">A Boolean denoting whether or not task has previously been queued. If this parameter is True, then the task may have been previously queued (scheduled); if False, then the task is known not to have been queued, and this call is being made in order to execute the task inline without queuing it.</param>
-        protected override bool TryExecuteTaskInline(Task task, bool taskWasPreviouslyQueued)
+        protected override bool TryExecuteTaskInline(System.Threading.Tasks.Task task, bool taskWasPreviouslyQueued)
         {
             RuntimeContext ctx = RuntimeContext.Current;
             bool canExecuteInline = ctx != null && object.Equals(ctx.GrainContext, workerGroup.GrainContext);

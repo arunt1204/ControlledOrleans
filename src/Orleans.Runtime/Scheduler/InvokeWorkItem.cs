@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+using Nekara.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Orleans.Runtime.Scheduler

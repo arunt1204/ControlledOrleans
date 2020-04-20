@@ -1,5 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+using System;
+using Nekara.Models;
 using Orleans.CodeGeneration;
 using Orleans.Runtime.Providers;
 using Microsoft.Extensions.Logging;

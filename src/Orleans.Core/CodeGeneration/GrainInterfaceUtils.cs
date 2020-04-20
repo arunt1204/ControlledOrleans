@@ -287,11 +287,12 @@ namespace Orleans.CodeGeneration
                             type.FullName, method.Name));
                     }
                 }
-                else if (!IsTaskType(method.ReturnType))
+                // else if (!IsTaskType(method.ReturnType))
+                else if (false)
                 {
-                    success = false;
-                    violations.Add(String.Format("Method {0}.{1} must return Task or Task<T> because it is defined within a grain interface.",
-                        type.FullName, method.Name));
+                    // success = false;
+                    // violations.Add(String.Format("Method {0}.{1} must return Task or Task<T> because it is defined within a grain interface.",
+                    //  type.FullName, method.Name));
                 }
 
                 ParameterInfo[] parameters = method.GetParameters();

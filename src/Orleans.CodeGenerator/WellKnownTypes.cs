@@ -62,7 +62,8 @@ namespace Orleans.CodeGenerator
             SerializerMethodAttribute = Type("Orleans.CodeGeneration.SerializerMethodAttribute");
             SerializerFeature = Type("Orleans.Serialization.SerializerFeature");
             String = compilation.GetSpecialType(SpecialType.System_String);
-            Task = Type("System.Threading.Tasks.Task");
+            // Task = Type("System.Threading.Tasks.Task");
+            Task = Type("Nekara.Models.Task");
             Task_1 = Type("System.Threading.Tasks.Task`1");
             ValueTask = OptionalType("System.Threading.Tasks.ValueTask");
             TimeSpan = Type("System.TimeSpan");
