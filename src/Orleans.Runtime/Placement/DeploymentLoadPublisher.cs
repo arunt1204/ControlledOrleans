@@ -154,7 +154,7 @@ namespace Orleans.Runtime
                                 .GetRuntimeStatistics()
                                 .ContinueWith((Task<SiloRuntimeStatistics> statsTask) =>
                                     {
-                                        if (statsTask.Status == TaskStatus.RanToCompletion)
+                                        if (statsTask.Status == System.Threading.Tasks.TaskStatus.RanToCompletion)
                                         {
                                             UpdateRuntimeStatistics(capture, statsTask.Result);
                                         }

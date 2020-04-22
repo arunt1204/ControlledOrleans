@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Nekara.Models;
+// using Nekara.Models;
 using Microsoft.Extensions.Logging;
 using Orleans.Configuration;
 using Orleans.Internal;
 using Orleans.Runtime.MembershipService;
 using Orleans.Runtime.Utilities;
+using System.Threading.Tasks;
 
 namespace Orleans.Runtime
 {
@@ -39,14 +40,14 @@ namespace Orleans.Runtime
 
         public IAsyncEnumerable<ClusterMembershipSnapshot> MembershipUpdates => this.updates;
 
-        public ValueTask Refresh(MembershipVersion targetVersion)
+        public System.Threading.Tasks.ValueTask Refresh(MembershipVersion targetVersion)
         {
             if (targetVersion != default && targetVersion != MembershipVersion.MinValue && this.snapshot.Version >= targetVersion)
                 return default;
 
             return RefreshAsync(targetVersion);
 
-            async ValueTask RefreshAsync(MembershipVersion v)
+            async System.Threading.Tasks.ValueTask RefreshAsync(MembershipVersion v)
             {
                 var didRefresh = false;
                 do
@@ -57,12 +58,12 @@ namespace Orleans.Runtime
                         didRefresh = true;
                     }
 
-                    await Task.Delay(TimeSpan.FromMilliseconds(10));
+                    await Nekara.Models.Task.Delay(TimeSpan.FromMilliseconds(10));
                 } while (this.snapshot.Version < v || this.snapshot.Version < this.membershipTableManager.MembershipTableSnapshot.Version);
             }
         }
 
-        private async Task ProcessMembershipUpdates(CancellationToken ct)
+        private async Nekara.Models.Task ProcessMembershipUpdates(CancellationToken ct)
         {
             try
             {
@@ -85,19 +86,19 @@ namespace Orleans.Runtime
 
         void ILifecycleParticipant<ISiloLifecycle>.Participate(ISiloLifecycle lifecycle)
         {
-            var tasks = new List<Task>(1);
+            var tasks = new List<Nekara.Models.Task>(1);
             var cancellation = new CancellationTokenSource();
-            Task OnRuntimeInitializeStart(CancellationToken _)
+            Nekara.Models.Task OnRuntimeInitializeStart(CancellationToken _)
             {
-                tasks.Add(Task.Run(() => this.ProcessMembershipUpdates(cancellation.Token)));
-                return Task.CompletedTask;
+                tasks.Add(Nekara.Models.Task.Run(() => this.ProcessMembershipUpdates(cancellation.Token)));
+                return Nekara.Models.Task.CompletedTask;
             }
 
-            async Task OnRuntimeInitializeStop(CancellationToken ct)
+            async Nekara.Models.Task OnRuntimeInitializeStop(CancellationToken ct)
             {
                 cancellation.Cancel(throwOnFirstException: false);
-                var shutdownGracePeriod = Task.WhenAll(Task.Delay(ClusterMembershipOptions.ClusteringShutdownGracePeriod), ct.WhenCancelled());
-                await Task.WhenAny(shutdownGracePeriod, Task.WhenAll(tasks));
+                var shutdownGracePeriod = Nekara.Models.Task.WhenAll(Nekara.Models.Task.Delay(ClusterMembershipOptions.ClusteringShutdownGracePeriod), ct.WhenCancelled());
+                await Nekara.Models.Task.WhenAny(shutdownGracePeriod, Nekara.Models.Task.WhenAll(tasks));
             }
 
             lifecycle.Subscribe(

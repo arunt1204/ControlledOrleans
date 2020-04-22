@@ -87,7 +87,15 @@ namespace Orleans.Runtime
 
             while (true)
             {
-                membershipTask ??= membershipUpdates.MoveNextAsync().AsTask();
+                /* Ctrl Task testing code */
+                System.Threading.Tasks.Task<bool> t1 = membershipUpdates.MoveNextAsync().AsTask();
+                Task<bool> t2 = new Task<bool>();
+                t2.InnerTask = t1;
+                
+                membershipTask ??= t2;
+                /* CtrlModel Task Testing code */
+
+                // membershipTask ??= membershipUpdates.MoveNextAsync().AsTask();
                 timerTask ??= this.refreshTimer.NextTick();
 
                 // Wait for either of the tasks to complete.

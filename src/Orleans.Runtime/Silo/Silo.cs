@@ -58,7 +58,7 @@ namespace Orleans.Runtime
         private readonly ILogger logger;
         private TypeManager typeManager;
         private readonly TaskCompletionSource<int> siloTerminatedTask =
-            new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
+            new TaskCompletionSource<int>(System.Threading.Tasks.TaskCreationOptions.RunContinuationsAsynchronously);
         private readonly SiloStatisticsManager siloStatistics;
         private readonly InsideRuntimeClient runtimeClient;
         private IReminderService reminderService;

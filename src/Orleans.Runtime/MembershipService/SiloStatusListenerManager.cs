@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Nekara.Models;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Collections.Immutable;
 using Orleans.Runtime.Utilities;
 using Orleans.Internal;
@@ -72,7 +73,7 @@ namespace Orleans.Runtime.MembershipService
             }
         }
 
-        private async Task ProcessMembershipUpdates()
+        private async Nekara.Models.Task ProcessMembershipUpdates()
         {
             ClusterMembershipSnapshot previous = default;
             try
@@ -142,21 +143,21 @@ namespace Orleans.Runtime.MembershipService
 
         void ILifecycleParticipant<ISiloLifecycle>.Participate(ISiloLifecycle lifecycle)
         {
-            var tasks = new List<Task>();
+            var tasks = new List<Nekara.Models.Task>();
 
-            lifecycle.Subscribe(nameof(SiloStatusListenerManager), ServiceLifecycleStage.AfterRuntimeGrainServices, OnStart, _ => Task.CompletedTask);
-            lifecycle.Subscribe(nameof(SiloStatusListenerManager), ServiceLifecycleStage.RuntimeInitialize, _ => Task.CompletedTask, OnStop);
+            lifecycle.Subscribe(nameof(SiloStatusListenerManager), ServiceLifecycleStage.AfterRuntimeGrainServices, OnStart, _ => Nekara.Models.Task.CompletedTask);
+            lifecycle.Subscribe(nameof(SiloStatusListenerManager), ServiceLifecycleStage.RuntimeInitialize, _ => Nekara.Models.Task.CompletedTask, OnStop);
 
-            Task OnStart(CancellationToken ct)
+            Nekara.Models.Task OnStart(CancellationToken ct)
             {
-                tasks.Add(Task.Run(() => this.ProcessMembershipUpdates()));
-                return Task.CompletedTask;
+                tasks.Add(Nekara.Models.Task.Run(() => this.ProcessMembershipUpdates()));
+                return Nekara.Models.Task.CompletedTask;
             }
 
-            Task OnStop(CancellationToken ct)
+            Nekara.Models.Task OnStop(CancellationToken ct)
             {
                 this.cancellation.Cancel(throwOnFirstException: false);
-                return Task.WhenAny(ct.WhenCancelled(), Task.WhenAll(tasks));
+                return Nekara.Models.Task.WhenAny(ct.WhenCancelled(), Nekara.Models.Task.WhenAll(tasks));
             }
         }
     }

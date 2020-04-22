@@ -9,6 +9,6 @@ namespace Orleans.Runtime
 
         IAsyncEnumerable<ClusterMembershipSnapshot> MembershipUpdates { get; }
 
-        ValueTask Refresh(MembershipVersion minimumVersion = default);
+        System.Threading.Tasks.ValueTask Refresh(MembershipVersion minimumVersion = default);
     }
 }

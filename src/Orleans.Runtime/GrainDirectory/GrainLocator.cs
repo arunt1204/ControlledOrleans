@@ -4,7 +4,8 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading;
-using Nekara.Models;
+using System.Threading.Tasks;
+// using Nekara.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Orleans.Configuration;
 using Orleans.GrainDirectory;
@@ -26,7 +27,7 @@ namespace Orleans.Runtime.GrainDirectory
 
         private HashSet<SiloAddress> knownDeadSilos = new HashSet<SiloAddress>();
 
-        private Task listenToClusterChangeTask;
+        private Nekara.Models.Task listenToClusterChangeTask;
 
         internal interface ITestAccessor
         {
@@ -46,7 +47,7 @@ namespace Orleans.Runtime.GrainDirectory
             this.cache = new LRUBasedGrainDirectoryCache(GrainDirectoryOptions.DEFAULT_CACHE_SIZE, GrainDirectoryOptions.DEFAULT_MAXIMUM_CACHE_TTL);
         }
 
-        public async Task<List<ActivationAddress>> Lookup(GrainId grainId)
+        public async Nekara.Models.Task<List<ActivationAddress>> Lookup(GrainId grainId)
         {
             if (grainId.IsClient())
                 return await this.inClusterGrainLocator.Lookup(grainId);
@@ -85,7 +86,7 @@ namespace Orleans.Runtime.GrainDirectory
             return results;
         }
 
-        public async Task<ActivationAddress> Register(ActivationAddress address)
+        public async Nekara.Models.Task<ActivationAddress> Register(ActivationAddress address)
         {
             if (address.Grain.IsClient())
                 return await this.inClusterGrainLocator.Register(address);
@@ -141,7 +142,7 @@ namespace Orleans.Runtime.GrainDirectory
             return false;
         }
 
-        public async Task UnregisterMany(List<ActivationAddress> addresses, UnregistrationCause cause)
+        public async Nekara.Models.Task UnregisterMany(List<ActivationAddress> addresses, UnregistrationCause cause)
         {
             try
             {
@@ -155,7 +156,7 @@ namespace Orleans.Runtime.GrainDirectory
             }
         }
 
-        public async Task Unregister(ActivationAddress address, UnregistrationCause cause)
+        public async Nekara.Models.Task Unregister(ActivationAddress address, UnregistrationCause cause)
         {
             try
             {
@@ -169,12 +170,12 @@ namespace Orleans.Runtime.GrainDirectory
 
         public void Participate(ISiloLifecycle lifecycle)
         {
-            Task OnStart(CancellationToken ct)
+            Nekara.Models.Task OnStart(CancellationToken ct)
             {
                 this.listenToClusterChangeTask = ListenToClusterChange();
-                return Task.CompletedTask;
+                return Nekara.Models.Task.CompletedTask;
             };
-            async Task OnStop(CancellationToken ct)
+            async Nekara.Models.Task OnStop(CancellationToken ct)
             {
                 this.shutdownToken.Cancel();
                 if (listenToClusterChangeTask != default && !ct.IsCancellationRequested)
@@ -183,7 +184,7 @@ namespace Orleans.Runtime.GrainDirectory
             lifecycle.Subscribe(nameof(GrainLocator), ServiceLifecycleStage.RuntimeGrainServices, OnStart, OnStop);
         }
 
-        private async Task ListenToClusterChange()
+        private async Nekara.Models.Task ListenToClusterChange()
         {
             var previousSnapshot = this.clusterMembershipService.CurrentSnapshot;
             // Update the list of known dead silos for lazy filtering for the first time

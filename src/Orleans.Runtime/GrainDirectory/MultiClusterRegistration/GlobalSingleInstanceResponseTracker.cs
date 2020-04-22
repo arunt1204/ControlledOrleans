@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nekara.Models;
@@ -117,7 +117,7 @@ namespace Orleans.Runtime.GrainDirectory
                 else
                 {
                     // When any of the promises that where incomplete finishes, re-run the check
-                    System.Threading.Tasks.Task.WhenAny(incompletePromises).ContinueWith(t => CheckIfDone());
+                    Nekara.Models.Task.WhenAny(incompletePromises).ContinueWith(t => CheckIfDone());
                 }
             }
         }

@@ -668,7 +668,7 @@ namespace Orleans.Runtime
             try
             {
                 var messageAddressingTask = AddressMessage(message);
-                if (messageAddressingTask.Status == TaskStatus.RanToCompletion)
+                if (messageAddressingTask.Status == System.Threading.Tasks.TaskStatus.RanToCompletion)
                 {
                     TransportMessage(message, sendingActivation);
                 }

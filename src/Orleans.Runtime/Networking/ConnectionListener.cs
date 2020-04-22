@@ -73,7 +73,7 @@ namespace Orleans.Runtime.Messaging
         public void Start()
         {
             if (this.listener is null) throw new InvalidOperationException("Listener is not bound");
-            this.acceptLoopTcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
+            this.acceptLoopTcs = new TaskCompletionSource<object>(System.Threading.Tasks.TaskCreationOptions.RunContinuationsAsynchronously);
             ThreadPool.UnsafeQueueUserWorkItem(this.StartAcceptingConnections, this.acceptLoopTcs);
         }
 
@@ -111,9 +111,24 @@ namespace Orleans.Runtime.Messaging
             {
                 if (this.acceptLoopTcs is object)
                 {
+
+                    /* Ctrl Task code - for Testing */
+                    var t1 = Task.Run(() =>
+                    {
+                        System.Threading.Tasks.Task.WhenAll(this.listener.UnbindAsync(cancellationToken).AsTask());
+                    });
+
+                    await Task.WhenAll(
+                        t1,
+                        this.acceptLoopTcs.Task);
+                    /* Ctrl Task code - for Testing */
+
+
+                    /* actual code 
                     await Task.WhenAll(
                         this.listener.UnbindAsync(cancellationToken).AsTask(),
                         this.acceptLoopTcs.Task);
+                    actual code */
                 }
                 else
                 {

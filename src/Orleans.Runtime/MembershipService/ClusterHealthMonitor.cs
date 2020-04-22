@@ -4,7 +4,8 @@ using System.Collections.Immutable;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading;
-using Nekara.Models;
+using System.Threading.Tasks;
+// using Nekara.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -69,11 +70,11 @@ namespace Orleans.Runtime.MembershipService
         /// Attempts to probe all active silos in the cluster, returning a list of silos with which connectivity could not be verified.
         /// </summary>
         /// <returns>A list of silos with which connectivity could not be verified.</returns>
-        public async Task<List<SiloAddress>> CheckClusterConnectivity(SiloAddress[] members)
+        public async Nekara.Models.Task<List<SiloAddress>> CheckClusterConnectivity(SiloAddress[] members)
         {
             if (members.Length == 0) return new List<SiloAddress>();
 
-            var tasks = new List<Task<int>>(members.Length);
+            var tasks = new List<Nekara.Models.Task<int>>(members.Length);
 
             this.log.LogInformation(
                 (int)ErrorCode.MembershipSendingPreJoinPing,
@@ -88,7 +89,7 @@ namespace Orleans.Runtime.MembershipService
 
             try
             {
-                await Task.WhenAll(tasks);
+                await Nekara.Models.Task.WhenAll(tasks);
             }
             catch
             {
@@ -98,7 +99,7 @@ namespace Orleans.Runtime.MembershipService
             var failed = new List<SiloAddress>();
             for (var i = 0; i < tasks.Count; i++)
             {
-                if (tasks[i].Status != TaskStatus.RanToCompletion || tasks[i].GetAwaiter().GetResult() > 0)
+                if (tasks[i].Status != System.Threading.Tasks.TaskStatus.RanToCompletion || tasks[i].GetAwaiter().GetResult() > 0)
                 {
                     failed.Add(members[i]);
                 }
@@ -107,7 +108,7 @@ namespace Orleans.Runtime.MembershipService
             return failed;
         }
 
-        private async Task ProcessMembershipUpdates()
+        private async Nekara.Models.Task ProcessMembershipUpdates()
         {
             try
             {
@@ -138,7 +139,7 @@ namespace Orleans.Runtime.MembershipService
             }
         }
 
-        private async Task MonitorClusterHealth()
+        private async Nekara.Models.Task MonitorClusterHealth()
         {
             if (this.log.IsEnabled(LogLevel.Debug)) this.log.LogDebug("Starting cluster health monitor");
             try
@@ -164,19 +165,19 @@ namespace Orleans.Runtime.MembershipService
             }
         }
 
-        private async Task ProbeMonitoredSilos()
+        private async Nekara.Models.Task ProbeMonitoredSilos()
         {
             try
             {
                 using var cancellation = new CancellationTokenSource(this.clusterMembershipOptions.ProbeTimeout);
-                var tasks = new List<Task>(this.monitoredSilos.Count);
+                var tasks = new List<Nekara.Models.Task>(this.monitoredSilos.Count);
                 foreach (var pair in this.monitoredSilos)
                 {
                     var monitor = pair.Value;
                     tasks.Add(PingSilo(monitor, cancellation.Token));
                 }
 
-                await Task.WhenAll(tasks);
+                await Nekara.Models.Task.WhenAll(tasks);
             }
             catch (Exception exception)
             {
@@ -186,7 +187,7 @@ namespace Orleans.Runtime.MembershipService
                     exception);
             }
 
-            async Task PingSilo(SiloHealthMonitor monitor, CancellationToken pingCancellation)
+            async Nekara.Models.Task PingSilo(SiloHealthMonitor monitor, CancellationToken pingCancellation)
             {
                 var failedProbes = await monitor.Probe(Interlocked.Increment(ref this.probeNumber), pingCancellation);
 
@@ -319,18 +320,18 @@ namespace Orleans.Runtime.MembershipService
         
         void ILifecycleParticipant<ISiloLifecycle>.Participate(ISiloLifecycle lifecycle)
         {
-            var tasks = new List<Task>();
+            var tasks = new List<Nekara.Models.Task>();
 
             lifecycle.Subscribe(nameof(ClusterHealthMonitor), ServiceLifecycleStage.Active, OnActiveStart, OnActiveStop);
 
-            Task OnActiveStart(CancellationToken ct)
+            Nekara.Models.Task OnActiveStart(CancellationToken ct)
             {
-                tasks.Add(Task.Run(() => this.ProcessMembershipUpdates()));
-                tasks.Add(Task.Run(() => this.MonitorClusterHealth()));
-                return Task.CompletedTask;
+                tasks.Add(Nekara.Models.Task.Run(() => this.ProcessMembershipUpdates()));
+                tasks.Add(Nekara.Models.Task.Run(() => this.MonitorClusterHealth()));
+                return Nekara.Models.Task.CompletedTask;
             }
 
-            Task OnActiveStop(CancellationToken ct)
+            Nekara.Models.Task OnActiveStop(CancellationToken ct)
             {
                 this.monitorClusterHealthTimer.Dispose();
                 this.shutdownCancellation.Cancel(throwOnFirstException: false);
@@ -343,8 +344,8 @@ namespace Orleans.Runtime.MembershipService
                 this.monitoredSilos = this.monitoredSilos.Clear();
 
                 // Allow some minimum time for graceful shutdown.
-                var shutdownGracePeriod = Task.WhenAll(Task.Delay(ClusterMembershipOptions.ClusteringShutdownGracePeriod), ct.WhenCancelled());
-                return Task.WhenAny(shutdownGracePeriod, Task.WhenAll(tasks));
+                var shutdownGracePeriod = Nekara.Models.Task.WhenAll(Nekara.Models.Task.Delay(ClusterMembershipOptions.ClusteringShutdownGracePeriod), ct.WhenCancelled());
+                return Nekara.Models.Task.WhenAny(shutdownGracePeriod, Nekara.Models.Task.WhenAll(tasks));
             }
         }
 

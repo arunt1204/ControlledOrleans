@@ -114,7 +114,7 @@ namespace Orleans.Runtime.Messaging
                 {
                     _ = SendAsync(senderTask, msg);
 
-                    async Task SendAsync(ValueTask<Connection> c, Message m)
+                    async Task SendAsync(System.Threading.Tasks.ValueTask<Connection> c, Message m)
                     {
                         try
                         {

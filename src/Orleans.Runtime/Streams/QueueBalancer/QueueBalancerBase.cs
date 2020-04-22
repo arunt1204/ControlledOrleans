@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Nekara.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -46,16 +47,16 @@ namespace Orleans.Streams
         public abstract IEnumerable<QueueId> GetMyQueues();
 
         /// <inheritdoc/>
-        public virtual Task Initialize(IStreamQueueMapper queueMapper)
+        public virtual Nekara.Models.Task Initialize(IStreamQueueMapper queueMapper)
         {
             ListenForClusterChanges().Ignore();
-            return Task.CompletedTask;
+            return Nekara.Models.Task.CompletedTask;
         }
 
-        public virtual Task Shutdown()
+        public virtual Nekara.Models.Task Shutdown()
         {
             this.cts.Cancel(throwOnFirstException: false);
-            return Task.CompletedTask;
+            return Nekara.Models.Task.CompletedTask;
         }
 
         #region Queue change notification - replace with IAsyncEnumerable change feed - jbragg
@@ -90,19 +91,19 @@ namespace Orleans.Streams
             }
         }
 
-        protected Task NotifyListeners()
+        protected Nekara.Models.Task NotifyListeners()
         {
-            if (this.Cancellation.IsCancellationRequested) return Task.CompletedTask;
+            if (this.Cancellation.IsCancellationRequested) return Nekara.Models.Task.CompletedTask;
             List<IStreamQueueBalanceListener> queueBalanceListenersCopy;
             lock (queueBalanceListeners)
             {
                 queueBalanceListenersCopy = queueBalanceListeners.ToList(); // make copy
             }
-            return Task.WhenAll(queueBalanceListenersCopy.Select(listener => listener.QueueDistributionChangeNotification()));
+            return Nekara.Models.Task.WhenAll(queueBalanceListenersCopy.Select(listener => listener.QueueDistributionChangeNotification()));
         }
 #endregion
 
-        private async Task ListenForClusterChanges()
+        private async Nekara.Models.Task ListenForClusterChanges()
         {
             var current = new HashSet<SiloAddress>();
             await foreach (var membershipSnapshot in this.clusterMembershipUpdates.WithCancellation(this.Cancellation))
