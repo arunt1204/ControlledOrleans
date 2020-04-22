@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>CtrlTaskTester</RootNamespace>
+    <AssemblyName>CtrlTaskTester</AssemblyName>
+    <OrleansBuildTimeCodeGen>true</OrleansBuildTimeCodeGen>
+    <TargetFrameworks>$(TestTargetFrameworks)</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Buffers" Version="$(SystemBuffersVersion)" PrivateAssets="all" />
+    <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
+    <PackageReference Include="xunit" Version="$(xUnitVersion)" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="$(xUnitVersion)" />
+    <PackageReference Include="Xunit.SkippableFact" Version="$(XunitSkippableFactVersion)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSdkVersion)" />
+    <PackageReference Include="System.Diagnostics.EventLog" Version="$(SystemDiagnosticsEventLogVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Orleans.TestingHost\Orleans.TestingHost.csproj" />
+  </ItemGroup>
+
+  <!-- <ItemGroup Condition="!$(TargetFramework.StartsWith('netcore'))">
+    <ProjectReference Include="$(SourceRoot)test\TestInfrastructure\Orleans.TestingHost.AppDomain\Orleans.TestingHost.AppDomain.csproj" />
+  </ItemGroup> -->
+
+  <ItemGroup>
+    <Reference Include="NekaraManagedClient">
+      <HintPath>..\..\..\..\newsch\nekara-csharp\Source\NekaraModels\bin\Debug\netstandard2.0\NekaraManagedClient.dll</HintPath>
+    </Reference>
+    <Reference Include="NekaraModels">
+      <HintPath>..\..\..\..\newsch\nekara-csharp\Source\NekaraModels\bin\Debug\netstandard2.0\NekaraModels.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(OS)'=='Windows_NT'">
+    <Content Include="C:\Users\t-arut\Documents\Base\newsch\nekara-csharp\Dependencies\coyote-scheduler\bin\Release\coyote.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
+  <!-- <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Tester.xunit.runner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup> -->
+</Project>
