@@ -251,7 +251,11 @@ namespace Orleans.Runtime
 
             try
             {
-                await this.scheduler.QueueTask(() => this.siloLifecycle.OnStart(cancellationToken), this.lifecycleSchedulingSystemTarget);
+                await this.scheduler.QueueTask(() =>
+                        this.siloLifecycle.OnStart(cancellationToken), this.lifecycleSchedulingSystemTarget
+                        );
+
+                Console.WriteLine("Did I reaching below");
             }
             catch (Exception exc)
             {

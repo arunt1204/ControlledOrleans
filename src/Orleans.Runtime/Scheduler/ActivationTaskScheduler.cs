@@ -36,10 +36,10 @@ namespace Orleans.Runtime.Scheduler
         /// <returns>An enumerable of the tasks currently scheduled.</returns>
         // protected override IEnumerable<Task> GetScheduledTasks() => this.workerGroup.GetScheduledTasks();
 
-        public void RunTask(Task task)
+        public void RunTask(System.Threading.Tasks.Task task)
         {
             RuntimeContext.SetExecutionContext(workerGroup.GrainContext);
-            bool done = TryExecuteTask(task.InnerTask);
+            bool done = TryExecuteTask(task);
             if (!done)
                 logger.Warn(ErrorCode.SchedulerTaskExecuteIncomplete4, "RunTask: Incomplete base.TryExecuteTask for Task Id={0} with Status={1}",
                     task.Id, task.Status);
@@ -55,9 +55,7 @@ namespace Orleans.Runtime.Scheduler
 #if DEBUG
             if (logger.IsEnabled(LogLevel.Trace)) logger.Trace(myId + " QueueTask Task Id={0}", task.Id);
 #endif
-            var t1 = new Task();
-            t1.InnerTask = task;
-            workerGroup.EnqueueTask(t1);
+            workerGroup.EnqueueTask(task);
         }
 
         /// <summary>

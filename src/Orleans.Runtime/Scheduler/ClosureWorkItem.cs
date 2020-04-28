@@ -33,6 +33,8 @@ namespace Orleans.Runtime.Scheduler
                 RuntimeContext.SetExecutionContext(this.GrainContext);
                 RequestContext.Clear();
                 await this.continuation();
+                // var t1 = this.continuation();
+                // t1.Wait();
                 this.completion.TrySetResult(true);
             }
             catch (Exception exception)

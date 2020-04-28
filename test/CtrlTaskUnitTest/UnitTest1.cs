@@ -29,7 +29,7 @@ namespace CtrlTaskUnitTest
             nekara.Api.CreateSession();
             nekara.Api.Attach();
 
-            var _t1 = new TestClusterBuilder();
+            var _t1 = new TestClusterBuilder(1);
             var cluster = _t1.Build();
             cluster.Deploy();
 

@@ -28,13 +28,13 @@ namespace Orleans.Runtime.Scheduler
         private readonly OrleansTaskScheduler masterScheduler;
         private WorkGroupStatus state;
         private readonly object lockable;
-        private readonly Queue<Task> workItems;
+        private readonly Queue<System.Threading.Tasks.Task> workItems;
 
         private long totalItemsEnQueued;    // equals total items queued, + 1
         private long totalItemsProcessed;
         private TimeSpan totalQueuingDelay;
 
-        private Task currentTask;
+        private System.Threading.Tasks.Task currentTask;
         private DateTime currentTaskStarted;
         private long shutdownSinceTimestamp;
         private long lastShutdownWarningTimestamp;
@@ -65,7 +65,7 @@ namespace Orleans.Runtime.Scheduler
             get { lock (lockable) { return WorkItemCount; } }
         }
 
-        private Task CurrentTask
+        private System.Threading.Tasks.Task CurrentTask
         {
             get => currentTask;
             set
@@ -131,7 +131,7 @@ namespace Orleans.Runtime.Scheduler
             cancellationToken = ct;
             this.schedulerStatistics = schedulerStatistics;
             state = WorkGroupStatus.Waiting;
-            workItems = new Queue<Task>();
+            workItems = new Queue<System.Threading.Tasks.Task>();
             lockable = new object();
             totalItemsEnQueued = 0;
             totalItemsProcessed = 0;
@@ -170,7 +170,7 @@ namespace Orleans.Runtime.Scheduler
         /// If we're adding it to the run list and we used to be waiting, now we're runnable.
         /// </summary>
         /// <param name="task">The work item to add.</param>
-        public void EnqueueTask(Task task)
+        public void EnqueueTask(System.Threading.Tasks.Task task)
         {
 #if DEBUG
             if (log.IsEnabled(LogLevel.Trace))
@@ -231,7 +231,7 @@ namespace Orleans.Runtime.Scheduler
         /// <summary>
         /// For debugger purposes only.
         /// </summary>
-        internal IEnumerable<Task> GetScheduledTasks()
+        internal IEnumerable<System.Threading.Tasks.Task> GetScheduledTasks()
         {
             foreach (var task in this.workItems)
             {
@@ -240,7 +240,7 @@ namespace Orleans.Runtime.Scheduler
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        private void LogEnqueueOnStoppedScheduler(Task task)
+        private void LogEnqueueOnStoppedScheduler(System.Threading.Tasks.Task task)
         {
             var now = ValueStopwatch.GetTimestamp();
             LogLevel logLevel;
@@ -366,7 +366,7 @@ namespace Orleans.Runtime.Scheduler
                     }
 
                     // Get the first Work Item on the list
-                    Task task;
+                    System.Threading.Tasks.Task task;
                     lock (lockable)
                     {
                         if (workItems.Count > 0)

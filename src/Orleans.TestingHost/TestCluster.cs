@@ -341,6 +341,8 @@ namespace Orleans.TestingHost
                 var siloStartTasks = Enumerable.Range(this.startedInstances, silosToStart)
                     .Select(instanceNumber => Task.Run(() => StartSiloAsync((short)instanceNumber, this.options, startSiloOnNewPort: startAdditionalSiloOnNewPort)));//.ToArray();
 
+                var t1 = siloStartTasks.Count();
+
                 try
                 {
                     await Task.WhenAll(siloStartTasks);

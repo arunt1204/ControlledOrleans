@@ -196,6 +196,11 @@ namespace Orleans.Internal
             return t == null ? "null" : string.Format("[Id={0}, Status={1}]", t.Id, Enum.GetName(typeof(System.Threading.Tasks.TaskStatus), t.Status));
         }
 
+        internal static String ToString(this System.Threading.Tasks.Task t)
+        {
+            return t == null ? "null" : string.Format("[Id={0}, Status={1}]", t.Id, Enum.GetName(typeof(System.Threading.Tasks.TaskStatus), t.Status));
+        }
+
         internal static String ToString<T>(this Task<T> t)
         {
             return t == null ? "null" : string.Format("[Id={0}, Status={1}]", t.Id, Enum.GetName(typeof(System.Threading.Tasks.TaskStatus), t.Status));
