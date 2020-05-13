@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using Nekara.Models;
 using Microsoft.Extensions.Logging;
+using NekaraManaged.Client;
 
 namespace Orleans.Runtime.Scheduler
 {
@@ -13,6 +14,9 @@ namespace Orleans.Runtime.Scheduler
     internal class ActivationTaskScheduler : TaskScheduler
     {
         private readonly ILogger logger;
+        internal NekaraManagedClient nekara;
+        internal Stack<System.Threading.Tasks.Task> tasks;
+        internal static Dictionary<int, ulong> dict = new Dictionary<int, ulong>();
 
         private static long idCounter;
         private readonly long myId;
@@ -23,6 +27,9 @@ namespace Orleans.Runtime.Scheduler
 
         internal ActivationTaskScheduler(WorkItemGroup workGroup, ILogger<ActivationTaskScheduler> logger)
         {
+            // nekara = RuntimeEnvironment.scheduler.Value;
+            // tasks = new Stack<System.Threading.Tasks.Task>();
+
             this.logger = logger;
             myId = Interlocked.Increment(ref idCounter);
             workerGroup = workGroup;
@@ -39,10 +46,19 @@ namespace Orleans.Runtime.Scheduler
         public void RunTask(System.Threading.Tasks.Task task)
         {
             RuntimeContext.SetExecutionContext(workerGroup.GrainContext);
-            bool done = TryExecuteTask(task);
-            if (!done)
+            // bool done = TryExecuteTask(task);
+             
+            task.Start(System.Threading.Tasks.TaskScheduler.Default);
+
+            ulong value;
+            dict.TryGetValue(task.Id, out value);
+
+            nekara.Api.BlockedOnResource(value);
+
+            
+            /* if (!done)
                 logger.Warn(ErrorCode.SchedulerTaskExecuteIncomplete4, "RunTask: Incomplete base.TryExecuteTask for Task Id={0} with Status={1}",
-                    task.Id, task.Status);
+                    task.Id, task.Status); */
             
             //  Consider adding ResetExecutionContext() or even better:
             //  Consider getting rid of ResetExecutionContext completely and just making sure we always call SetExecutionContext before TryExecuteTask.
@@ -54,7 +70,8 @@ namespace Orleans.Runtime.Scheduler
         {
 #if DEBUG
             if (logger.IsEnabled(LogLevel.Trace)) logger.Trace(myId + " QueueTask Task Id={0}", task.Id);
-#endif
+#endif      
+
             workerGroup.EnqueueTask(task);
         }
 

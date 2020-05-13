@@ -195,6 +195,9 @@ namespace Orleans.Runtime.Scheduler
                 LogEnqueueOnStoppedScheduler(task);
             }
 
+            // var nekara = NekaraManaged.Client.RuntimeEnvironment.scheduler.Value;
+            // nekara.Api.ContextSwitch();
+
             lock (lockable)
             {
                 long thisSequenceNumber = totalItemsEnQueued++;

@@ -34,7 +34,7 @@ namespace Orleans.Runtime.Scheduler
                 RequestContext.Clear();
                 await this.continuation();
                 // var t1 = this.continuation();
-                // t1.Wait();
+                // await System.Threading.Tasks.Task.Delay(1);
                 this.completion.TrySetResult(true);
             }
             catch (Exception exception)

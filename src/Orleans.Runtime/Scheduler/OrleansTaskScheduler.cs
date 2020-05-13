@@ -209,6 +209,7 @@ namespace Orleans.Runtime.Scheduler
                 // This will make sure the TaskScheduler.Current is set correctly on any task that is created implicitly in the execution of this workItem.
                 // We must wrap any work item in Task and enqueue it as a task to the right scheduler via Task.Start.
                 Task t = TaskSchedulerUtils.WrapWorkItemAsTask(workItem);
+                ActivationTaskScheduler.dict.Add(t.InnerTask.Id, t.ResourceId);
                 t.Start(scheduler);
             }
             else
